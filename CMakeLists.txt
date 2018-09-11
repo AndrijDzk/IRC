@@ -28,10 +28,12 @@ set(SDIR Srcs)
 set(SOURCES1
 	"parse_args.c"
 	"start_server.c"
+	"choose_necessary_sockets.c"
 	"examine_sockets.c"
 	"accept_incoming_connection.c"
-	"check_for_incoming_data.c"
+	"read_incoming_data.c"
 	"process_incoming_data.c"
+	"send_data_to_clients.c"
 	"disconnect_clients.c"
 	"main.c")
 PREPEND(SOURCES_REL1 ${NAME1} ${SOURCES1})

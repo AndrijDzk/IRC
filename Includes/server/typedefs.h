@@ -6,7 +6,7 @@
 /*   By: adzikovs <adzikovs@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/07 12:28:39 by adzikovs          #+#    #+#             */
-/*   Updated: 2018/09/09 12:52:59 by adzikovs         ###   ########.fr       */
+/*   Updated: 2018/09/11 13:27:35 by adzikovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,17 +27,33 @@ typedef struct				s_args
 	uint16_t				port;
 }							t_args;
 
+typedef struct				s_sock_arr
+{
+	int						server;
+	fd_set					read;
+	fd_set					write;
+	fd_set					error;
+}							t_sock_arr;
+
 typedef struct				s_channel
 {
 	char					*name;
 	fd_set					users;
 }							t_channel;
 
+typedef struct				s_clients_db
+{
+	fd_set					sockets;
+	char					*names[FD_SETSIZE];
+	t_list					*readbuffs[FD_SETSIZE];
+	t_list					*writebuffs[FD_SETSIZE];
+}							t_clients_db;
+
 typedef struct				s_server
 {
 	int						socket;
 	uint16_t				port;
-	fd_set					clients;
+	t_clients_db			clients;
 	int						connections_am;
 	t_list					*channels;
 }							t_server;

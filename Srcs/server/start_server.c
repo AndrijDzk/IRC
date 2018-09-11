@@ -6,7 +6,7 @@
 /*   By: adzikovs <adzikovs@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/07 14:08:15 by adzikovs          #+#    #+#             */
-/*   Updated: 2018/09/09 12:52:59 by adzikovs         ###   ########.fr       */
+/*   Updated: 2018/09/11 13:27:35 by adzikovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,13 @@ static void		create_main_socket(t_args *args, t_server *server)
 int				start_server(t_args *args, t_server *server)
 {
 	create_main_socket(args, server);
-	FD_ZERO(&(server->clients));
+	FD_ZERO(&(server->clients.sockets));
+	ft_bzero(server->clients.names,
+				sizeof(*(server->clients.names)) * FD_SETSIZE);
+	ft_bzero(server->clients.readbuffs,
+				sizeof(*(server->clients.readbuffs)) * FD_SETSIZE);
+	ft_bzero(server->clients.writebuffs,
+				sizeof(*(server->clients.writebuffs)) * FD_SETSIZE);
 	server->connections_am = 0;
 	server->channels = NULL;
 	return (0);

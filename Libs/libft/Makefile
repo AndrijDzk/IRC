@@ -2,8 +2,10 @@ NAME = libft.a
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra
 SRCS = ft_atoi.c\
+		ft_itoa.c\
 		ft_bzero.c\
 		ft_strcmp.c\
+		ft_strncmp.c\
 		ft_power.c\
 		ft_find_char.c\
 		ft_strcpy.c\

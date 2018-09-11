@@ -1,29 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   examine_sockets.c                                  :+:      :+:    :+:   */
+/*   choose_necessary_sockets.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adzikovs <adzikovs@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/09/08 15:29:42 by adzikovs          #+#    #+#             */
-/*   Updated: 2018/09/08 15:34:01 by adzikovs         ###   ########.fr       */
+/*   Created: 2018/09/11 14:32:29 by adzikovs          #+#    #+#             */
+/*   Updated: 2018/09/11 14:37:19 by adzikovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <sys/select.h>
-#include <stdlib.h>
-#include <typedefs.h>
+#include "typedefs.h"
 
-int		examine_sockets(t_sock_arr *sockets)
+t_sock_arr		choose_necessary_sockets(t_server *server)
 {
-	int				ret;
-	struct timeval	wait_time;
+	t_sock_arr		res;
+	int				i;
 
-	wait_time.tv_sec = 10;
-	wait_time.tv_usec = 0;
-	FD_SET(sockets->server, &(sockets->read));
-	ret = select(FD_SETSIZE, &(sockets->read),
-				&(sockets->write), &(sockets->error), &wait_time);
-	return (ret);
+	res.server = server->socket;
+	res.read = server->clients.sockets;
+	FD_ZERO(&(res.write));
+	FD_ZERO(&(res.error));
+	i = 0;
+	while (i < FD_SETSIZE)
+	{
+		if (server->clients.writebuffs[i])
+			FD_SET(i, &(res.write));
+		i++;
+	}
+	return (res);
 }
-

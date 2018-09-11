@@ -6,7 +6,7 @@
 /*   By: adzikovs <adzikovs@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/05 17:01:39 by adzikovs          #+#    #+#             */
-/*   Updated: 2018/09/08 15:43:47 by adzikovs         ###   ########.fr       */
+/*   Updated: 2018/09/11 14:37:19 by adzikovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,16 +37,19 @@ fd_set			my_fd_set(int fd, fd_set set)
 
 static void		tick(t_server *server)
 {
-	fd_set			read_ready;
+	t_sock_arr		ready_sockets;
 	fd_set			disconnect;
 	int				ret;
 
-	read_ready = examine_sockets(my_fd_set(server->socket, server->clients));
-	ret = process_incoming_data(server, &read_ready, &disconnect);
+	ready_sockets = choose_necessary_sockets(server);
+	examine_sockets(&ready_sockets);
+	read_incoming_data(server, &(ready_sockets.read));
+	ret = process_incoming_data(&server->clients, &disconnect);
+	send_data_to_clients(&(server->clients), ready_sockets.write);
 	disconnect_clients(server, &disconnect);
 	if (ret == 1)
 	{
-		close_all_sockets(&(server->clients));
+		close_all_sockets(&(server->clients.sockets));
 		close(server->socket);
 		exit(0);
 	}

@@ -14,6 +14,18 @@
 
 #include "typedefs.h"
 
+static int		clear_client_data(t_clients_db *clients, int id)
+{
+	if (id < 0 || id >= FD_SETSIZE)
+		return (1);
+	FD_CLR(id, &(clients->sockets));
+	free(clients->names[id]);
+	clients->names[id] = NULL;
+	t_list_clear(&(clients->readbuffs[id]));
+	t_list_clear(&(clients->writebuffs[id]));
+	return (0);
+}
+
 void			disconnect_clients(t_server *server, fd_set *dscn)
 {
 	int		i;
@@ -24,8 +36,11 @@ void			disconnect_clients(t_server *server, fd_set *dscn)
 		if (FD_ISSET(i, dscn))
 		{
 			close(i);
-			FD_CLR(i, &(server->clients));
-			server->connections_am--;
+			clear_client_data(&(server->clients), i);
+			if (server->connections_am > 0)
+				server->connections_am--;
+			else
+				ft_printf("%$Error: wrong connections amount!", 2);
 		}
 		i++;
 	}

@@ -6,7 +6,7 @@
 /*   By: adzikovs <adzikovs@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/07 14:40:51 by adzikovs          #+#    #+#             */
-/*   Updated: 2018/09/07 14:41:30 by adzikovs         ###   ########.fr       */
+/*   Updated: 2018/09/11 11:43:44 by adzikovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,5 +40,20 @@ void		t_list_delete_next_node(t_list **next)
 		tmp = *next;
 		*next = (*next)->next;
 		free(tmp);
+	}
+}
+
+void		t_list_clear(t_list **begin)
+{
+	t_list		*tmp;
+
+	while (begin && *begin)
+	{
+		tmp = (*begin)->next;
+		free((*begin)->data);
+		(*begin)->data = NULL;
+		(*begin)->size = 0;
+		free(*begin);
+		(*begin) = tmp;
 	}
 }

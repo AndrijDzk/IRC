@@ -7,8 +7,10 @@ set(LIBFT_INC ${CMAKE_CURRENT_SOURCE_DIR} PARENT_SCOPE)
 
 set(SOURCES
 		"ft_atoi.c"
+		"ft_itoa.c"
 		"ft_bzero.c"
 		"ft_strcmp.c"
+		"ft_strncmp.c"
 		"ft_power.c"
 		"ft_find_char.c"
 		"ft_strcpy.c"

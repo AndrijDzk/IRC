@@ -6,7 +6,7 @@
 /*   By: adzikovs <adzikovs@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/02 10:43:50 by adzikovs          #+#    #+#             */
-/*   Updated: 2018/09/07 14:40:28 by adzikovs         ###   ########.fr       */
+/*   Updated: 2018/09/11 13:53:27 by adzikovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,13 @@ int		ft_printf(const char *str, ...);
 
 int		ft_atoi(const char *str);
 
+char	*ft_itoa(int i);
+
 void	ft_bzero(void *addr, size_t size);
 
 int		ft_strcmp(const char *s1, const char *s2);
+
+int		ft_strncmp(const char *s1, const char *s2, size_t n);
 
 int		ft_strbegins(const char *str, char const *start);
 
@@ -33,7 +37,7 @@ int		ft_strdiff(const char *s1, const char *s2);
 
 int		ft_find_char(char *str, char c);
 
-int		ft_strlen(const char *str);
+size_t	ft_strlen(const char *str);
 
 char	*ft_strcpy(char *dst, const char *src);
 
@@ -52,5 +56,7 @@ t_list	*new_t_list_node(void *data, size_t size);
 void	t_list_push_back(t_list **begin, void *data, size_t size);
 
 void	t_list_delete_next_node(t_list **next);
+
+void	t_list_clear(t_list **begin);
 
 #endif

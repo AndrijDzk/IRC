@@ -6,7 +6,7 @@
 /*   By: adzikovs <adzikovs@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/07 14:25:13 by adzikovs          #+#    #+#             */
-/*   Updated: 2018/09/08 15:20:25 by adzikovs         ###   ########.fr       */
+/*   Updated: 2018/09/11 13:53:27 by adzikovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,11 @@ t_connection		accept_incoming_connection(t_server *server)
 	res.socket = accept(server->socket,
 						(struct sockaddr*)&(res.s_addr),
 						&s_addr_len);
-	FD_SET(res.socket, &(server->clients));
-	server->connections_am++;
+	if (res.socket >= 0)
+	{
+		FD_SET(res.socket, &(server->clients.sockets));
+		server->clients.names[res.socket] = ft_itoa(res.socket);
+		server->connections_am++;
+	}
 	return (res);
 }
