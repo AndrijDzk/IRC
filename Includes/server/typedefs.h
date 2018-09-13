@@ -6,7 +6,7 @@
 /*   By: adzikovs <adzikovs@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/07 12:28:39 by adzikovs          #+#    #+#             */
-/*   Updated: 2018/09/11 13:27:35 by adzikovs         ###   ########.fr       */
+/*   Updated: 2018/09/13 14:58:00 by adzikovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,19 @@
 # include <sys/resource.h>
 # include <netdb.h>
 
-#include "libft.h"
+# include "libft.h"
 
 # define ARGS_AM 1
 # define ARG_PORT 1
+
+# define COMMANDS_AM 1
+# define COMMAND_NICK 0
+
+# define NICK "/nick"
+
+enum						e_is_ret {Is = 0, Isnt = 1, Maybe = 2};
+
+enum						e_cl_comm {Text = 0, Incomplete = 1, Nick = 2};
 
 typedef struct				s_args
 {
@@ -45,7 +54,7 @@ typedef struct				s_clients_db
 {
 	fd_set					sockets;
 	char					*names[FD_SETSIZE];
-	t_list					*readbuffs[FD_SETSIZE];
+	char					*readbuffs[FD_SETSIZE][2];
 	t_list					*writebuffs[FD_SETSIZE];
 }							t_clients_db;
 

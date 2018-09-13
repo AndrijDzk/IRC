@@ -19,7 +19,7 @@ static unsigned		count_digits(int i)
 
 	res = 1;
 	base = 10;
-	while ((i%base) != i)
+	while ((i % base) != i)
 	{
 		res++;
 		base *= 10;

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   process_incoming_data.c                           :+:      :+:    :+:   */
+/*   process_incoming_data.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adzikovs <adzikovs@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/09/07 15:38:03 by adzikovs          #+#    #+#             */
-/*   Updated: 2018/09/08 15:20:40 by adzikovs         ###   ########.fr       */
+/*   Created: 2018/09/13 14:59:24 by adzikovs          #+#    #+#             */
+/*   Updated: 2018/09/13 14:59:24 by adzikovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,23 +25,22 @@ static void	change_res(char *buff, int *res)
 		*res = 2;
 }
 
-static void join_client_msgs(t_list **readbuffs)
+static void	join_client_msgs(char **readbuffs)
 {
 	char	*data_tmp;
-	t_list	*node_tmp;
 
-	while (readbuffs && *readbuffs && (*readbuffs)->next)
+	if (readbuffs[0] && readbuffs[1])
 	{
-		data_tmp = ft_strjoin((*readbuffs)->data, (*readbuffs)->next->data);
-		node_tmp = (*readbuffs)->next;
-		(*readbuffs)->next = (*readbuffs)->next->next;
-		free(node_tmp->data);
-		node_tmp->data = NULL;
-		node_tmp->size = 0;
-		free(node_tmp);
-		free((*readbuffs)->data);
-		(*readbuffs)->data = data_tmp;
-		(*readbuffs)->size = ft_strlen((*readbuffs)->data);
+		data_tmp = ft_strjoin(readbuffs[0], readbuffs[1]);
+		free(readbuffs[0]);
+		readbuffs[0] = data_tmp;
+		free(readbuffs[1]);
+		readbuffs[1] = NULL;
+	}
+	else if (readbuffs[1])
+	{
+		readbuffs[0] = readbuffs[1];
+		readbuffs[1] = NULL;
 	}
 }
 
@@ -54,11 +53,9 @@ static int	forward_message(int sckt, t_clients_db *clients)
 
 	if (sckt < 0 || sckt > FD_SETSIZE)
 		return (1);
-	tmp = ft_itoa(sckt);
-	msg = ft_strjoin(tmp, ": ");
-	free(tmp);
+	msg = ft_strjoin(clients->names[sckt], ": ");
 	tmp = msg;
-	msg = ft_strjoin(msg, (clients->readbuffs)[sckt]->data);
+	msg = ft_strjoin(msg, (clients->readbuffs)[sckt][0]);
 	free(tmp);
 	i = 0;
 	while (i < FD_SETSIZE)
@@ -74,27 +71,32 @@ static int	forward_message(int sckt, t_clients_db *clients)
 	return (0);
 }
 
-static int	proceed_input(int sckt, t_clients_db *clients,
+static int	proceed_input(int sckt, t_server *server,
 							fd_set *dscn, int *res)
 {
-	t_list		**curr_rb;
-	t_list		**curr_wb;
+	char				*curr_rb;
+	enum e_cl_comm		comm_type;
 
 	if (sckt < 0 || sckt > FD_SETSIZE)
 		return (1);
-	curr_rb = &((clients->readbuffs)[sckt]);
-	curr_wb = &((clients->writebuffs)[sckt]);
-	join_client_msgs(curr_rb);
-	change_res((*curr_rb)->data, res);
-	ft_printf("%s: %s\n", clients->names[sckt], (*curr_rb)->data);
-	forward_message(sckt, clients);
-	if (ft_strcmp((*curr_rb)->data, "dcn\n") == 0 && res == 0)
+	join_client_msgs(server->clients.readbuffs[sckt]);
+	curr_rb = (server->clients.readbuffs)[sckt][0];
+	change_res(curr_rb, res);
+	comm_type = is_command(curr_rb);
+	if (comm_type == Text)
+	{
+		ft_printf("%s: %s", server->clients.names[sckt], curr_rb);
+		forward_message(sckt, &(server->clients));
+	}
+	else if (comm_type != Incomplete)
+		execute_client_command(server, comm_type, sckt);
+	if (ft_strcmp(curr_rb, "dcn\n") == 0 && res == 0)
 		FD_SET(sckt, dscn);
-	t_list_clear(curr_rb);
+	remove_processed_data(comm_type, &(server->clients), sckt);
 	return (0);
 }
 
-int			process_incoming_data(t_clients_db *clients, fd_set *dscn)
+int			process_incoming_data(t_server *server, fd_set *dscn)
 {
 	int			res;
 	int			i;
@@ -104,8 +106,8 @@ int			process_incoming_data(t_clients_db *clients, fd_set *dscn)
 	i = 0;
 	while (i < FD_SETSIZE)
 	{
-		if (clients->readbuffs[i])
-				proceed_input(i, clients, dscn, &res);
+		if (server->clients.readbuffs[i][1])
+			proceed_input(i, server, dscn, &res);
 		i++;
 	}
 	return (res);

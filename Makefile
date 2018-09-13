@@ -19,6 +19,10 @@ SRCS1 =	parse_args.c\
 		accept_incoming_connection.c\
 		read_incoming_data.c\
 		process_incoming_data.c\
+		is_command.c\
+		execute_client_command.c\
+		execute_nick_command.c\
+		remove_processed_data.c\
 		send_data_to_clients.c\
 		disconnect_clients.c\
 		main.c

@@ -6,7 +6,7 @@
 /*   By: adzikovs <adzikovs@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/02 10:43:50 by adzikovs          #+#    #+#             */
-/*   Updated: 2018/09/11 13:53:27 by adzikovs         ###   ########.fr       */
+/*   Updated: 2018/09/13 13:23:57 by adzikovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ int		ft_strcmp(const char *s1, const char *s2);
 
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 
+char	*ft_strchr(const char *s, int c);
+
 int		ft_strbegins(const char *str, char const *start);
 
 int		ft_strdiff(const char *s1, const char *s2);
@@ -40,6 +42,8 @@ int		ft_find_char(char *str, char c);
 size_t	ft_strlen(const char *str);
 
 char	*ft_strcpy(char *dst, const char *src);
+
+char	*ft_strncpy(char *dst, const char *src, size_t n);
 
 char	*ft_strdup(const char *s1);
 

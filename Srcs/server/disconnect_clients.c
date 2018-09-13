@@ -19,9 +19,21 @@ static int		clear_client_data(t_clients_db *clients, int id)
 	if (id < 0 || id >= FD_SETSIZE)
 		return (1);
 	FD_CLR(id, &(clients->sockets));
-	free(clients->names[id]);
-	clients->names[id] = NULL;
-	t_list_clear(&(clients->readbuffs[id]));
+	if (clients->names[id])
+	{
+		free(clients->names[id]);
+		clients->names[id] = NULL;
+	}
+	if (clients->readbuffs[id][0])
+	{
+		free(clients->readbuffs[id][0]);
+		clients->readbuffs[id][0] = NULL;
+	}
+	if (clients->readbuffs[id][1])
+	{
+		free(clients->readbuffs[id][1]);
+		clients->readbuffs[id][1] = NULL;
+	}
 	t_list_clear(&(clients->writebuffs[id]));
 	return (0);
 }

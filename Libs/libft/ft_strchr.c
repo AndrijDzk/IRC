@@ -1,28 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   examine_sockets.c                                  :+:      :+:    :+:   */
+/*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adzikovs <adzikovs@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/09/08 15:29:42 by adzikovs          #+#    #+#             */
-/*   Updated: 2018/09/08 15:34:01 by adzikovs         ###   ########.fr       */
+/*   Created: 2018/09/13 14:35:09 by adzikovs          #+#    #+#             */
+/*   Updated: 2018/09/13 14:36:07 by adzikovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <sys/select.h>
-#include <stdlib.h>
-#include <typedefs.h>
+#include <string.h>
 
-int		examine_sockets(t_sock_arr *sockets)
+char	*ft_strchr(const char *s, int c)
 {
-	int				ret;
-	struct timeval	wait_time;
+	size_t	i;
 
-	wait_time.tv_sec = 10;
-	wait_time.tv_usec = 0;
-	FD_SET(sockets->server, &(sockets->read));
-	ret = select(FD_SETSIZE, &(sockets->read),
-				&(sockets->write), &(sockets->error), &wait_time);
-	return (ret);
+	i = 0;
+	while (s[i])
+	{
+		if (s[i] == c)
+			return ((char*)s + i);
+		i++;
+	}
+	return (NULL);
 }

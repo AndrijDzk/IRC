@@ -22,7 +22,7 @@ size_t		ft_strlen(const char *str)
 	return (i);
 }
 
-int		ft_wstrlen(const wchar_t *str)
+int			ft_wstrlen(const wchar_t *str)
 {
 	int		i;
 
@@ -32,7 +32,7 @@ int		ft_wstrlen(const wchar_t *str)
 	return (i);
 }
 
-int		ft_wcharlen(const wchar_t *c)
+int			ft_wcharlen(const wchar_t *c)
 {
 	int		i;
 

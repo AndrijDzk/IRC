@@ -44,7 +44,7 @@ static void		tick(t_server *server)
 	ready_sockets = choose_necessary_sockets(server);
 	examine_sockets(&ready_sockets);
 	read_incoming_data(server, &(ready_sockets.read));
-	ret = process_incoming_data(&server->clients, &disconnect);
+	ret = process_incoming_data(server, &disconnect);
 	send_data_to_clients(&(server->clients), ready_sockets.write);
 	disconnect_clients(server, &disconnect);
 	if (ret == 1)
