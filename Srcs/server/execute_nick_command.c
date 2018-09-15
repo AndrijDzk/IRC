@@ -17,7 +17,7 @@ static char	*get_nick_from_command(char *command)
 	size_t		i;
 	size_t		start;
 
-	i = ft_strlen(NICK) + 1;
+	i = ft_strlen(NICK);
 	if (i >= ft_strlen(command))
 		return (NULL);
 	start = i;

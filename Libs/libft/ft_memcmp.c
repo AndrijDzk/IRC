@@ -1,33 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   choose_necessary_sockets.c                         :+:      :+:    :+:   */
+/*   ft_memcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adzikovs <adzikovs@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/09/11 14:32:29 by adzikovs          #+#    #+#             */
-/*   Updated: 2018/09/11 14:37:19 by adzikovs         ###   ########.fr       */
+/*   Created: 2018/09/15 13:56:17 by adzikovs          #+#    #+#             */
+/*   Updated: 2018/09/15 13:56:24 by adzikovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "typedefs.h"
+#include <string.h>
 
-t_sock_arr		choose_necessary_sockets(t_server *server)
+int		ft_memcmp(const void *s1, const void *s2, size_t n)
 {
-	t_sock_arr		res;
-	int				i;
+	const unsigned char		*buff1;
+	const unsigned char		*buff2;
+	size_t					i;
 
-	res.server = server->socket;
-	res.read = server->clients.sockets;
-	FD_ZERO(&(res.write));
-	FD_ZERO(&(res.error));
-	FD_SET(0, &(res.read));
+	if (s1 == NULL || s2 == NULL)
+		return (-1);
+	buff1 = s1;
+	buff2 = s2;
 	i = 0;
-	while (i < FD_SETSIZE)
+	while (i < n)
 	{
-		if (server->clients.writebuffs[i])
-			FD_SET(i, &(res.write));
+		if (buff1[i] != buff2[i])
+			return (buff1[i] - buff2[i]);
 		i++;
 	}
-	return (res);
+	return (0);
 }

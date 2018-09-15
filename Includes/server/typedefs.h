@@ -6,7 +6,7 @@
 /*   By: adzikovs <adzikovs@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/07 12:28:39 by adzikovs          #+#    #+#             */
-/*   Updated: 2018/09/13 14:58:00 by adzikovs         ###   ########.fr       */
+/*   Updated: 2018/09/15 15:36:49 by adzikovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,32 @@
 
 # include "libft.h"
 
+# define OK 0
+# define EXIT 1
+
 # define ARGS_AM 1
 # define ARG_PORT 1
 
-# define COMMANDS_AM 1
+# define COMMANDS_AM 4
 # define COMMAND_NICK 0
+# define COMMAND_JOIN 1
+# define COMMAND_WHO 2
+# define COMMAND_LEAVE 3
 
-# define NICK "/nick"
+# define NICK "/nick "
+# define JOIN "/join "
+# define WHO "/who"
+# define LEAVE "/leave"
+# define MSG "/msg "
+
+# define EXIT_COMMAND_LITERAL "exit\n"
+# define CC_COMMAND "/createchannel "
 
 enum						e_is_ret {Is = 0, Isnt = 1, Maybe = 2};
 
-enum						e_cl_comm {Text = 0, Incomplete = 1, Nick = 2};
+enum						e_cl_comm {Text = 0, Incomplete = 1,
+										Nick = 2, Join = 3, Who = 4,
+										Leave = 5};
 
 typedef struct				s_args
 {
@@ -56,6 +71,7 @@ typedef struct				s_clients_db
 	char					*names[FD_SETSIZE];
 	char					*readbuffs[FD_SETSIZE][2];
 	t_list					*writebuffs[FD_SETSIZE];
+	t_channel				*channels[FD_SETSIZE];
 }							t_clients_db;
 
 typedef struct				s_server

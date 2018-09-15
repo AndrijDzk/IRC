@@ -13,6 +13,7 @@ SRCS = ft_atoi.c\
 		ft_strdup.c\
 		ft_strsub.c\
 		ft_strjoin.c\
+		ft_memcmp.c\
 		list.c\
 		ft_printf/ft_strlen.c\
 		ft_printf/ft_flag_funcs.c\

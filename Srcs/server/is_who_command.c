@@ -1,33 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   choose_necessary_sockets.c                         :+:      :+:    :+:   */
+/*   is_who_command.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adzikovs <adzikovs@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/09/11 14:32:29 by adzikovs          #+#    #+#             */
-/*   Updated: 2018/09/11 14:37:19 by adzikovs         ###   ########.fr       */
+/*   Created: 2018/09/15 14:47:03 by adzikovs          #+#    #+#             */
+/*   Updated: 2018/09/15 14:47:03 by adzikovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "typedefs.h"
 
-t_sock_arr		choose_necessary_sockets(t_server *server)
+enum e_is_ret			is_who_command(char *message, size_t len)
 {
-	t_sock_arr		res;
-	int				i;
+	size_t		who_len;
+	size_t		cmp_len;
 
-	res.server = server->socket;
-	res.read = server->clients.sockets;
-	FD_ZERO(&(res.write));
-	FD_ZERO(&(res.error));
-	FD_SET(0, &(res.read));
-	i = 0;
-	while (i < FD_SETSIZE)
+	who_len = ft_strlen(WHO);
+	if (len < who_len)
+		cmp_len = len;
+	else
+		cmp_len = who_len;
+	if (ft_strncmp(message, WHO, cmp_len) == 0)
 	{
-		if (server->clients.writebuffs[i])
-			FD_SET(i, &(res.write));
-		i++;
+		if (len < who_len || ft_strchr(message, '\n') == NULL)
+			return (Maybe);
+		else
+			return (Is);
 	}
-	return (res);
+	return (Isnt);
 }

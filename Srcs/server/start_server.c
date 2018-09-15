@@ -6,7 +6,7 @@
 /*   By: adzikovs <adzikovs@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/07 14:08:15 by adzikovs          #+#    #+#             */
-/*   Updated: 2018/09/11 13:27:35 by adzikovs         ###   ########.fr       */
+/*   Updated: 2018/09/15 11:44:21 by adzikovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,17 +41,39 @@ static void		create_main_socket(t_args *args, t_server *server)
 	}
 }
 
-int				start_server(t_args *args, t_server *server)
+static void		clients_db_init(t_server *server)
 {
-	create_main_socket(args, server);
 	FD_ZERO(&(server->clients.sockets));
 	ft_bzero(server->clients.names,
 				sizeof(*(server->clients.names)) * FD_SETSIZE);
 	ft_bzero(server->clients.readbuffs,
-				sizeof(*(server->clients.readbuffs)) * FD_SETSIZE);
+				sizeof(*(server->clients.readbuffs)) * FD_SETSIZE * 2);
 	ft_bzero(server->clients.writebuffs,
 				sizeof(*(server->clients.writebuffs)) * FD_SETSIZE);
+	ft_bzero(server->clients.channels,
+				sizeof(*(server->clients.channels)) * FD_SETSIZE);
+}
+
+static void		channels_init(t_server *server)
+{
+	t_channel	*general;
+	size_t		size;
+
+	size = sizeof(*general);
+	general = (t_channel*)malloc(size);
+	general->name = ft_strdup("General");
+	FD_ZERO(&(general->users));
+	t_list_push_back(&(server->channels), general, size);
+}
+
+int				start_server(t_args *args, t_server *server)
+{
+	size_t		size;
+
+	size = sizeof(*(server->clients.readbuffs));
+	create_main_socket(args, server);
+	clients_db_init(server);
 	server->connections_am = 0;
-	server->channels = NULL;
+	channels_init(server);
 	return (0);
 }

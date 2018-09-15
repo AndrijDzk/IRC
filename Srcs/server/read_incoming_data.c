@@ -6,7 +6,7 @@
 /*   By: adzikovs <adzikovs@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/11 11:12:03 by adzikovs          #+#    #+#             */
-/*   Updated: 2018/09/13 11:37:13 by adzikovs         ###   ########.fr       */
+/*   Updated: 2018/09/15 14:20:31 by adzikovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,28 @@ static void	save_input(int sckt, t_msg *msg, t_clients_db *clients)
 	}
 }
 
+static void	save_server_stdin(t_clients_db *clients)
+{
+	char	**server_stdin_buff;
+	int		ret;
+
+	if (clients == NULL)
+		return ;
+	server_stdin_buff = &((clients->readbuffs)[0][0]);
+	if (*server_stdin_buff == NULL)
+	{
+		*server_stdin_buff = (char*)malloc(20);
+		if ((ret = read(0, *server_stdin_buff, 20)) <= 0)
+		{
+			free(*server_stdin_buff);
+			*server_stdin_buff = NULL;
+		}
+		if (ret >= 20)
+			ret = 19;
+		(*server_stdin_buff)[ret] = 0;
+	}
+}
+
 int			read_incoming_data(t_server *server, fd_set *rd)
 {
 	int			i;
@@ -47,6 +69,11 @@ int			read_incoming_data(t_server *server, fd_set *rd)
 	{
 		accept_incoming_connection(server);
 		FD_CLR(server->socket, rd);
+	}
+	if (FD_ISSET(0, rd))
+	{
+		save_server_stdin(&(server->clients));
+		FD_CLR(0, rd);
 	}
 	i = 0;
 	while (i < FD_SETSIZE)

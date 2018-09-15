@@ -1,33 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   choose_necessary_sockets.c                         :+:      :+:    :+:   */
+/*   is_leave_command.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adzikovs <adzikovs@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/09/11 14:32:29 by adzikovs          #+#    #+#             */
-/*   Updated: 2018/09/11 14:37:19 by adzikovs         ###   ########.fr       */
+/*   Created: 2018/09/15 15:24:28 by adzikovs          #+#    #+#             */
+/*   Updated: 2018/09/15 15:24:28 by adzikovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "typedefs.h"
 
-t_sock_arr		choose_necessary_sockets(t_server *server)
+enum e_is_ret			is_leave_command(char *message, size_t len)
 {
-	t_sock_arr		res;
-	int				i;
+	size_t		leave_len;
+	size_t		cmp_len;
 
-	res.server = server->socket;
-	res.read = server->clients.sockets;
-	FD_ZERO(&(res.write));
-	FD_ZERO(&(res.error));
-	FD_SET(0, &(res.read));
-	i = 0;
-	while (i < FD_SETSIZE)
+	leave_len = ft_strlen(LEAVE);
+	if (len < leave_len)
+		cmp_len = len;
+	else
+		cmp_len = leave_len;
+	if (ft_strncmp(message, LEAVE, cmp_len) == 0)
 	{
-		if (server->clients.writebuffs[i])
-			FD_SET(i, &(res.write));
-		i++;
+		if (len < leave_len || ft_strchr(message, '\n') == NULL)
+			return (Maybe);
+		else
+			return (Is);
 	}
-	return (res);
+	return (Isnt);
 }

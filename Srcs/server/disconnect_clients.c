@@ -35,6 +35,11 @@ static int		clear_client_data(t_clients_db *clients, int id)
 		clients->readbuffs[id][1] = NULL;
 	}
 	t_list_clear(&(clients->writebuffs[id]));
+	if ((clients->channels)[id])
+	{
+		FD_CLR(id, &((clients->channels)[id]->users));
+		(clients->channels)[id] = NULL;
+	}
 	return (0);
 }
 

@@ -1,33 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   choose_necessary_sockets.c                         :+:      :+:    :+:   */
+/*   execute_leave_command.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adzikovs <adzikovs@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/09/11 14:32:29 by adzikovs          #+#    #+#             */
-/*   Updated: 2018/09/11 14:37:19 by adzikovs         ###   ########.fr       */
+/*   Created: 2018/09/15 15:27:04 by adzikovs          #+#    #+#             */
+/*   Updated: 2018/09/15 15:30:13 by adzikovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "typedefs.h"
 
-t_sock_arr		choose_necessary_sockets(t_server *server)
+int					execute_leave_command(t_server *srv, int sckt)
 {
-	t_sock_arr		res;
-	int				i;
-
-	res.server = server->socket;
-	res.read = server->clients.sockets;
-	FD_ZERO(&(res.write));
-	FD_ZERO(&(res.error));
-	FD_SET(0, &(res.read));
-	i = 0;
-	while (i < FD_SETSIZE)
-	{
-		if (server->clients.writebuffs[i])
-			FD_SET(i, &(res.write));
-		i++;
-	}
-	return (res);
+	if (sckt < 0 || sckt >= FD_SETSIZE)
+		return (1);
+	if ((srv->clients.channels)[sckt])
+		FD_CLR(sckt, &(srv->clients.channels[sckt]->users));
+	srv->clients.channels[sckt] = NULL;
+	return (0);
 }

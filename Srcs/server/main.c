@@ -6,7 +6,7 @@
 /*   By: adzikovs <adzikovs@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/05 17:01:39 by adzikovs          #+#    #+#             */
-/*   Updated: 2018/09/11 14:37:19 by adzikovs         ###   ########.fr       */
+/*   Updated: 2018/09/15 11:44:21 by adzikovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static void		tick(t_server *server)
 	ret = process_incoming_data(server, &disconnect);
 	send_data_to_clients(&(server->clients), ready_sockets.write);
 	disconnect_clients(server, &disconnect);
-	if (ret == 1)
+	if (ret == EXIT)
 	{
 		close_all_sockets(&(server->clients.sockets));
 		close(server->socket);
