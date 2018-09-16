@@ -6,7 +6,7 @@
 /*   By: adzikovs <adzikovs@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/08 10:23:29 by adzikovs          #+#    #+#             */
-/*   Updated: 2018/09/08 10:26:42 by adzikovs         ###   ########.fr       */
+/*   Updated: 2018/09/16 10:58:11 by adzikovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,8 @@
 
 #include "typedefs.h"
 
-static int		clear_client_data(t_clients_db *clients, int id)
+static void	clear_buffs(t_clients_db *clients, int id)
 {
-	if (id < 0 || id >= FD_SETSIZE)
-		return (1);
-	FD_CLR(id, &(clients->sockets));
-	if (clients->names[id])
-	{
-		free(clients->names[id]);
-		clients->names[id] = NULL;
-	}
 	if (clients->readbuffs[id][0])
 	{
 		free(clients->readbuffs[id][0]);
@@ -35,6 +27,23 @@ static int		clear_client_data(t_clients_db *clients, int id)
 		clients->readbuffs[id][1] = NULL;
 	}
 	t_list_clear(&(clients->writebuffs[id]));
+}
+
+int			disconnect_client(t_clients_db *clients, int id)
+{
+	if (id < 0 || id >= FD_SETSIZE)
+		return (1);
+	close(id);
+	FD_CLR(id, &(clients->sockets));
+	ft_printf("Disconnected client");
+	if (clients->names[id])
+	{
+		ft_printf(" %s", clients->names[id]);
+		free(clients->names[id]);
+		clients->names[id] = NULL;
+	}
+	ft_printf("\n");
+	clear_buffs(clients, id);
 	if ((clients->channels)[id])
 	{
 		FD_CLR(id, &((clients->channels)[id]->users));
@@ -43,7 +52,7 @@ static int		clear_client_data(t_clients_db *clients, int id)
 	return (0);
 }
 
-void			disconnect_clients(t_server *server, fd_set *dscn)
+void		disconnect_clients(t_server *server, fd_set *dscn)
 {
 	int		i;
 
@@ -52,8 +61,7 @@ void			disconnect_clients(t_server *server, fd_set *dscn)
 	{
 		if (FD_ISSET(i, dscn))
 		{
-			close(i);
-			clear_client_data(&(server->clients), i);
+			disconnect_client(&(server->clients), i);
 			if (server->connections_am > 0)
 				server->connections_am--;
 			else

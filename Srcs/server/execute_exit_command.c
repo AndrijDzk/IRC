@@ -1,42 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   common.h                                           :+:      :+:    :+:   */
+/*   execute_exit_command.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adzikovs <adzikovs@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/09/08 10:59:31 by adzikovs          #+#    #+#             */
-/*   Updated: 2018/09/16 13:06:28 by adzikovs         ###   ########.fr       */
+/*   Created: 2018/09/16 11:01:13 by adzikovs          #+#    #+#             */
+/*   Updated: 2018/09/16 11:01:13 by adzikovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef COMMON_H
-# define COMMON_H
+#include "server.h"
 
-# define TRANSFER_MAGIC -42
-
-# define OK 0
-# define WTF 1
-# define EOF 2
-# define NO_MESSAGE 3
-
-# include <unistd.h>
-
-typedef struct	s_msg_hdr
+int			execute_exit_command(t_server *srv, int sckt)
 {
-	int			magic1;
-	size_t		msg_size;
-	int			magic2;
-}				t_msg_hdr;
+	t_channel	*curr_channel;
 
-typedef struct	s_msg
-{
-	size_t		size;
-	void		*data;
-}				t_msg;
-
-int				send_msg(int sckt, t_msg *msg);
-
-int				receive_msg(int sck, t_msg *msg);
-
-#endif
+	if (sckt < 0 || sckt >= FD_SETSIZE)
+		return (1);
+	curr_channel = srv->clients.channels[sckt];
+	if (curr_channel != NULL)
+		FD_CLR(sckt, &(curr_channel->users));
+	return (disconnect_client(&(srv->clients), sckt));
+}

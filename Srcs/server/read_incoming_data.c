@@ -6,7 +6,7 @@
 /*   By: adzikovs <adzikovs@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/11 11:12:03 by adzikovs          #+#    #+#             */
-/*   Updated: 2018/09/15 14:20:31 by adzikovs         ###   ########.fr       */
+/*   Updated: 2018/09/16 13:36:01 by adzikovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,28 @@ static void	save_server_stdin(t_clients_db *clients)
 	}
 }
 
-int			read_incoming_data(t_server *server, fd_set *rd)
+static void	read_data_from_clients(t_server *server, fd_set *rd)
 {
 	int			i;
 	int			ret;
 	t_msg		msg;
 
+	i = 0;
+	while (i < FD_SETSIZE)
+	{
+		if (FD_ISSET(i, rd))
+		{
+			if ((ret = receive_msg(i, &msg)) == OK)
+				save_input(i, &msg, &(server->clients));
+			else if (ret == EOF)
+				disconnect_client(&(server->clients), i);
+		}
+		i++;
+	}
+}
+
+int			read_incoming_data(t_server *server, fd_set *rd)
+{
 	if (FD_ISSET(server->socket, rd))
 	{
 		accept_incoming_connection(server);
@@ -75,15 +91,6 @@ int			read_incoming_data(t_server *server, fd_set *rd)
 		save_server_stdin(&(server->clients));
 		FD_CLR(0, rd);
 	}
-	i = 0;
-	while (i < FD_SETSIZE)
-	{
-		if (FD_ISSET(i, rd))
-		{
-			if ((ret = receive_msg(i, &msg)) == 0)
-				save_input(i, &msg, &(server->clients));
-		}
-		i++;
-	}
+	read_data_from_clients(server, rd);
 	return (0);
 }

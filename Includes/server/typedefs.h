@@ -6,7 +6,7 @@
 /*   By: adzikovs <adzikovs@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/07 12:28:39 by adzikovs          #+#    #+#             */
-/*   Updated: 2018/09/15 15:36:49 by adzikovs         ###   ########.fr       */
+/*   Updated: 2018/09/16 13:44:18 by adzikovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,26 +25,42 @@
 # define ARGS_AM 1
 # define ARG_PORT 1
 
-# define COMMANDS_AM 4
+# define COMMANDS_AM 6
 # define COMMAND_NICK 0
 # define COMMAND_JOIN 1
 # define COMMAND_WHO 2
 # define COMMAND_LEAVE 3
+# define COMMAND_MSG 4
+# define COMMAND_EXIT 5
 
 # define NICK "/nick "
 # define JOIN "/join "
 # define WHO "/who"
 # define LEAVE "/leave"
 # define MSG "/msg "
+# define CLIENT_EXIT "/exit\n"
 
 # define EXIT_COMMAND_LITERAL "exit\n"
 # define CC_COMMAND "/createchannel "
 
-enum						e_is_ret {Is = 0, Isnt = 1, Maybe = 2};
+enum						e_is_ret
+{
+	Is = 0,
+	Isnt = 1,
+	Maybe = 2
+};
 
-enum						e_cl_comm {Text = 0, Incomplete = 1,
-										Nick = 2, Join = 3, Who = 4,
-										Leave = 5};
+enum						e_cl_comm
+{
+	Text = 0,
+	Incomplete = 1,
+	Nick = 2,
+	Join = 3,
+	Who = 4,
+	Leave = 5,
+	Msg = 6,
+	Exit = 7
+};
 
 typedef struct				s_args
 {

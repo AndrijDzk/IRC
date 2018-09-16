@@ -24,17 +24,21 @@ SRCS1 =	parse_args.c\
 		is_who_command.c\
 		is_leave_command.c\
 		is_msg_command.c\
+		is_exit_command.c\
 		execute_client_command.c\
 		execute_nick_command.c\
 		execute_join_command.c\
 		execute_leave_command.c\
 		execute_who_command.c\
+		execute_msg_command.c\
+		execute_exit_command.c\
 		remove_processed_data.c\
 		send_data_to_clients.c\
 		disconnect_clients.c\
 		main.c
 
-SRCS2 =	main.c
+SRCS2 =	is_connect_command.c\
+		main.c
 
 COMMON_SRCS =	send_msg.c\
 				receive_msg.c

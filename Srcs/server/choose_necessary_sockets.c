@@ -6,7 +6,7 @@
 /*   By: adzikovs <adzikovs@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/11 14:32:29 by adzikovs          #+#    #+#             */
-/*   Updated: 2018/09/11 14:37:19 by adzikovs         ###   ########.fr       */
+/*   Updated: 2018/09/16 12:46:00 by adzikovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ t_sock_arr		choose_necessary_sockets(t_server *server)
 	int				i;
 
 	res.server = server->socket;
-	res.read = server->clients.sockets;
+	FD_COPY(&(server->clients.sockets), &(res.read));
 	FD_ZERO(&(res.write));
 	FD_ZERO(&(res.error));
 	FD_SET(0, &(res.read));

@@ -13,4 +13,6 @@
 #ifndef CLIENT_H
 # define CLIENT_H
 
+int		is_connect_command(char *command, char **res);
+
 #endif

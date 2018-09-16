@@ -12,13 +12,30 @@
 
 #include "typedefs.h"
 
+static void	send_names_of_all_users(t_server *srv,
+									t_channel *curr_channel,
+									t_list **curr_writebuff)
+{
+	char		*name;
+	size_t		i;
+
+	i = 0;
+	while (i < FD_SETSIZE)
+	{
+		if (FD_ISSET(i, &(curr_channel->users)))
+		{
+			name = ft_strjoin(srv->clients.names[i], "\n");
+			t_list_push_back(curr_writebuff, name, ft_strlen(name));
+		}
+		i++;
+	}
+}
+
 int			execute_who_command(t_server *srv, int sckt)
 {
 	t_channel	*curr_channel;
 	t_list		**curr_writebuff;
 	size_t		len;
-	char		*name;
-	size_t		i;
 
 	if (sckt < 0 || sckt >= FD_SETSIZE)
 		return (1);
@@ -32,18 +49,6 @@ int			execute_who_command(t_server *srv, int sckt)
 	t_list_push_back(curr_writebuff, ft_strdup(curr_channel->name), len);
 	len = ft_strlen(":\n");
 	t_list_push_back(curr_writebuff, ft_strdup(":\n"), len);
-	if (curr_channel)
-	{
-		i = 0;
-		while (i < FD_SETSIZE)
-		{
-			if (FD_ISSET(i, &(curr_channel->users)))
-			{
-				name = ft_strjoin(srv->clients.names[i], "\n");
-				t_list_push_back(curr_writebuff, name, ft_strlen(name));
-			}
-			i++;
-		}
-	}
+	send_names_of_all_users(srv, curr_channel, curr_writebuff);
 	return (0);
 }

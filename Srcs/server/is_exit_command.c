@@ -1,42 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   common.h                                           :+:      :+:    :+:   */
+/*   is_exit_command.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adzikovs <adzikovs@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/09/08 10:59:31 by adzikovs          #+#    #+#             */
-/*   Updated: 2018/09/16 13:06:28 by adzikovs         ###   ########.fr       */
+/*   Created: 2018/09/16 10:58:33 by adzikovs          #+#    #+#             */
+/*   Updated: 2018/09/16 10:58:33 by adzikovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef COMMON_H
-# define COMMON_H
+#include "typedefs.h"
 
-# define TRANSFER_MAGIC -42
-
-# define OK 0
-# define WTF 1
-# define EOF 2
-# define NO_MESSAGE 3
-
-# include <unistd.h>
-
-typedef struct	s_msg_hdr
+enum e_is_ret			is_exit_command(char *message, size_t len)
 {
-	int			magic1;
-	size_t		msg_size;
-	int			magic2;
-}				t_msg_hdr;
+	size_t		exit_len;
+	size_t		cmp_len;
 
-typedef struct	s_msg
-{
-	size_t		size;
-	void		*data;
-}				t_msg;
-
-int				send_msg(int sckt, t_msg *msg);
-
-int				receive_msg(int sck, t_msg *msg);
-
-#endif
+	exit_len = ft_strlen(CLIENT_EXIT);
+	if (len < exit_len)
+		cmp_len = len;
+	else
+		cmp_len = exit_len;
+	if (ft_strncmp(message, CLIENT_EXIT, cmp_len) == 0)
+	{
+		if (len < exit_len)
+			return (Maybe);
+		else
+			return (Is);
+	}
+	return (Isnt);
+}

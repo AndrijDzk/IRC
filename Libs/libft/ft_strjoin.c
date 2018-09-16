@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adzikovs <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: adzikovs <adzikovs@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/30 12:10:49 by adzikovs          #+#    #+#             */
-/*   Updated: 2017/04/05 10:54:56 by adzikovs         ###   ########.fr       */
+/*   Updated: 2018/09/16 09:51:32 by adzikovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,4 +36,24 @@ char	*ft_strjoin(const char *s1, const char *s2)
 		res[j] = '\0';
 		return (res);
 	}
+}
+
+char	*ft_multistrjoin(char *strings[], size_t am)
+{
+	char	*res;
+	char	*tmp;
+	size_t	i;
+
+	if (am == 0)
+		return (NULL);
+	res = ft_strdup(strings[0]);
+	i = 1;
+	while (i < am)
+	{
+		tmp = res;
+		res = ft_strjoin(res, strings[i]);
+		free(tmp);
+		i++;
+	}
+	return (res);
 }

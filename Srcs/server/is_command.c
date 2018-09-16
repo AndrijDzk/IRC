@@ -6,7 +6,7 @@
 /*   By: adzikovs <adzikovs@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/13 11:10:58 by adzikovs          #+#    #+#             */
-/*   Updated: 2018/09/15 15:16:29 by adzikovs         ###   ########.fr       */
+/*   Updated: 2018/09/16 09:39:06 by adzikovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,10 @@ static void				init_arrays(t_is_fp *is_f_array, enum e_cl_comm *rets)
 	rets[COMMAND_WHO] = Who;
 	is_f_array[COMMAND_LEAVE] = &is_leave_command;
 	rets[COMMAND_LEAVE] = Leave;
+	is_f_array[COMMAND_MSG] = &is_msg_command;
+	rets[COMMAND_MSG] = Msg;
+	is_f_array[COMMAND_EXIT] = &is_exit_command;
+	rets[COMMAND_EXIT] = Exit;
 }
 
 enum e_cl_comm			is_command(char *message)

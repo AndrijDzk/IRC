@@ -6,7 +6,7 @@
 /*   By: adzikovs <adzikovs@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/13 13:34:05 by adzikovs          #+#    #+#             */
-/*   Updated: 2018/09/15 15:16:29 by adzikovs         ###   ########.fr       */
+/*   Updated: 2018/09/16 09:39:06 by adzikovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,10 @@ static void	init_arrays(t_cl_comm_fp *funcs_array, enum e_cl_comm *ids)
 	ids[COMMAND_WHO] = Who;
 	funcs_array[COMMAND_LEAVE] = &execute_leave_command;
 	ids[COMMAND_LEAVE] = Leave;
+	funcs_array[COMMAND_MSG] = &execute_msg_command;
+	ids[COMMAND_MSG] = Msg;
+	funcs_array[COMMAND_EXIT] = &execute_exit_command;
+	ids[COMMAND_EXIT] = Exit;
 }
 
 int			execute_client_command(t_server *srv, enum e_cl_comm type, int sckt)

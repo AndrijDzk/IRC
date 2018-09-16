@@ -65,8 +65,7 @@ static int	forward_message(int sckt, t_clients_db *clients)
 	return (0);
 }
 
-static int	proceed_input(int sckt, t_server *server,
-							fd_set *dscn)
+static int	proceed_input(int sckt, t_server *server)
 {
 	char				*curr_rb;
 	enum e_cl_comm		comm_type;
@@ -83,18 +82,15 @@ static int	proceed_input(int sckt, t_server *server,
 	}
 	else if (comm_type != Incomplete)
 		execute_client_command(server, comm_type, sckt);
-	if (ft_strcmp(curr_rb, "exit\n") == 0)
-		FD_SET(sckt, dscn);
 	remove_processed_data(comm_type, &(server->clients), sckt);
 	return (0);
 }
 
-int			process_incoming_data(t_server *server, fd_set *dscn)
+int			process_incoming_data(t_server *server)
 {
 	int			res;
 	int			i;
 
-	FD_ZERO(dscn);
 	res = OK;
 	if (process_server_stdin(server) == EXIT)
 		res = EXIT;
@@ -102,7 +98,7 @@ int			process_incoming_data(t_server *server, fd_set *dscn)
 	while (i < FD_SETSIZE)
 	{
 		if (server->clients.readbuffs[i][1])
-			proceed_input(i, server, dscn);
+			proceed_input(i, server);
 		i++;
 	}
 	return (res);

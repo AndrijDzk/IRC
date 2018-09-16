@@ -6,11 +6,31 @@
 /*   By: adzikovs <adzikovs@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/15 15:38:17 by adzikovs          #+#    #+#             */
-/*   Updated: 2018/09/15 15:38:17 by adzikovs         ###   ########.fr       */
+/*   Updated: 2018/09/16 09:33:41 by adzikovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "typedefs.h"
+
+static enum e_is_ret	check_params(char *message, size_t pos)
+{
+	size_t		len;
+
+	len = ft_strlen(message);
+	if (pos >= len)
+		return (Isnt);
+	while (message[pos] == ' ')
+		pos++;
+	while (message[pos] != ' ' && message[pos] == 0 && message[pos] == '\n')
+		pos++;
+	if (message[pos] == 0 || message[pos] == '\n')
+		return (Isnt);
+	while (message[pos] == ' ')
+		pos++;
+	if (message[pos] == 0 || message[pos] == '\n')
+		return (Isnt);
+	return (Is);
+}
 
 enum e_is_ret			is_msg_command(char *message, size_t len)
 {
@@ -27,7 +47,7 @@ enum e_is_ret			is_msg_command(char *message, size_t len)
 		if (len < msg_len || ft_strchr(message, '\n') == NULL)
 			return (Maybe);
 		else
-			return (Is);
+			return (check_params(message, msg_len));
 	}
 	return (Isnt);
 }

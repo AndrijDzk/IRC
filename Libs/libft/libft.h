@@ -6,7 +6,7 @@
 /*   By: adzikovs <adzikovs@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/02 10:43:50 by adzikovs          #+#    #+#             */
-/*   Updated: 2018/09/13 13:23:57 by adzikovs         ###   ########.fr       */
+/*   Updated: 2018/09/16 09:48:46 by adzikovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ char	*ft_strndup(const char *s1, size_t n);
 char	*ft_strsub(const char *s, unsigned int start, size_t len);
 
 char	*ft_strjoin(const char *s1, const char *s2);
+
+char	*ft_multistrjoin(char *strings[], size_t am);
 
 int		ft_count_digits(uintmax_t value, int base);
 
